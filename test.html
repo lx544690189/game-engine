@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <canvas id="canvas" ></canvas>
+  <button id="btn">开始</button>
+  <script>
+
+    var canvas = document.getElementById("canvas");
+    var cxt = canvas.getContext("2d");
+    var centerX = canvas.width / 2;
+    var centerY = canvas.height / 2;
+    var g = 0.3;
+    var bounce = -0.7;
+    function Ball(x, y, radius, speed) {
+      this.x = x;
+      this.y = y;
+      this.radius = radius;
+      this.speed = speed;
+    }
+
+    function Getrandom(min, max) {
+      return (Math.random() * (max - min) + min + 1);
+    }
+    var ball = [];
+    document.getElementById("btn").onclick = function () {
+      var speed = {
+        x: 0,
+        y: 3
+      };
+      x = Getrandom(30, canvas.width - 30);
+      ball.push(new Ball(x, 0, 10, speed))
+    }
+    function drawBall() {
+      cxt.clearRect(0, 0, canvas.width, canvas.height);
+      for (var i = 0; i < ball.length; i++) {
+        var b = ball[i];
+        cxt.beginPath();
+        b.x += b.speed.x;
+        b.y += b.speed.y;
+        if (b.y >= canvas.height - b.radius * 2) {
+          b.y = canvas.height - b.radius * 2;
+          b.speed.y *= bounce;
+        }
+
+        b.speed.y += g;
+        b.y += b.speed.y;
+        cxt.arc(b.x, b.y, b.radius, 0, Math.PI * 2, true);
+        cxt.fillStyle = "red";
+        cxt.fill();
+        cxt.closePath();
+      }
+      requestAnimationFrame(drawBall);
+    }
+    drawBall();
+  </script>
+</body>
+
+</html>
