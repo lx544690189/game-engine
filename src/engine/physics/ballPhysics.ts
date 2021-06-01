@@ -5,11 +5,11 @@ import Canvas from '../canvas';
  */
 export default class BallPhysics {
   /** Canvas */
-  private canvas: Canvas;
+  canvas: Canvas;
   /** 重力加速度 */
-  private gravity: number;
+  gravity: number;
   /** 重力角度（0-360） */
-  private angle: number;
+  angle: number;
   /** 上一帧时间 */
   moment?: number;
 
@@ -35,9 +35,8 @@ export default class BallPhysics {
     const length = imageSpirits.length;
     for (let i = 0; i < length; i++) {
       const imageSpirit = imageSpirits[i];
-      console.log('imageSpirit: ', imageSpirit);
+      // if(imageSpirit.)
       const beforeT = <number>imageSpirit.speed / this.gravity;
-      // console.log('imageSpirit.speed: ', imageSpirit.speed);
       const currentT = beforeT + diffTime;
       const beforeH = (1 / 2) * this.gravity * Math.pow(beforeT, 2);
       const currentH = (1 / 2) * this.gravity * Math.pow(currentT, 2);
@@ -45,12 +44,11 @@ export default class BallPhysics {
       const currentY = <number>imageSpirit.y + diffH;
       imageSpirit.speed = this.gravity * currentT;
       imageSpirit.y = currentY;
-      console.log('currentY: ', currentY, this.canvas.ref.height);
+      console.log('currentY: ', currentY);
       // 边界碰撞，速度衰减
-      if (currentY >= this.canvas.ref.height) {
-        console.log('currentY: ', currentY);
+      if (currentY + imageSpirit.radius >= this.canvas.height) {
         imageSpirit.speed = imageSpirit.speed * 0.5;
-        imageSpirit.y = this.canvas.ref.height;
+        imageSpirit.y = this.canvas.height - imageSpirit.radius;
       }
       // console.log('imageSpirit.y: ', imageSpirit.y);
     }

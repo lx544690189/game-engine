@@ -7,6 +7,8 @@ export default class ImageSpirit {
   y?: number;
   /** 速度（px/s） */
   speed?: number;
+  /** 运动方向 */
+  speedAngle: number;
   radius: number;
 
   /**
@@ -17,27 +19,6 @@ export default class ImageSpirit {
     this.image = image;
     this.radius = radius;
   }
-
-  // /**
-  //  * 渲染精灵
-  //  * @param x 圆心坐标轴x
-  //  * @param y 圆心坐标轴y
-  //  * @param radius 半径
-  //  */
-  // draw(x: number, y: number) {
-  //   this.x = x;
-  //   this.y = y;
-  //   this.context.save();
-  //   this.context.beginPath();
-  //   this.context.arc(x, y, this.radius, 0, 2 * Math.PI);
-  //   this.context.stroke();
-  //   this.context.clip(); // 剪切路径
-  //   const diameter = this.radius * 2;
-  //   const dx = x - this.radius;
-  //   const dy = y - this.radius;
-  //   this.context.drawImage(this.image, dx, dy, diameter, diameter);
-  //   this.context.restore();
-  // }
 
   setInitialAttr(x: number, y: number, speed:number){
     this.x = x;

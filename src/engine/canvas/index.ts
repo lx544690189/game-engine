@@ -2,6 +2,8 @@ import ImageSpirit from '../spirit/imageSpirit';
 
 export default class Canvas {
   ref: HTMLCanvasElement;
+  width: number;
+  height: number;
   context: CanvasRenderingContext2D;
   /** 球球精灵 */
   imageSpirits: ImageSpirit[] = [];
@@ -12,12 +14,14 @@ export default class Canvas {
    * @param height 高（px）
    */
   constructor(ref: HTMLCanvasElement, width: number, height: number) {
+    this.width = width;
+    this.height = height;
     // 防止canvas在高倍屏下模糊
     if (window.devicePixelRatio) {
       ref.style.width = width + 'px';
       ref.style.height = height + 'px';
-      ref.height = height * window.devicePixelRatio;
       ref.width = width * window.devicePixelRatio;
+      ref.height = height * window.devicePixelRatio;
     }
     this.ref = ref;
     const context = ref.getContext('2d');
@@ -49,7 +53,7 @@ export default class Canvas {
         this.context.save();
         this.context.beginPath();
         this.context.arc(x, y, radius, 0, 2 * Math.PI);
-        this.context.stroke();
+        // this.context.stroke();
         this.context.clip(); // 剪切路径
         const diameter = imageSpirit.radius * 2;
         const dx = x - radius;
