@@ -48,19 +48,19 @@ export default class Canvas {
     const length = this.imageSpirits.length;
     for (let i = 0; i < length; i++) {
       const imageSpirit = this.imageSpirits[i];
-      const { x, y, radius, image } = imageSpirit;
-      if (x && y && radius) {
-        this.context.save();
-        this.context.beginPath();
-        this.context.arc(x, y, radius, 0, 2 * Math.PI);
-        // this.context.stroke();
-        this.context.clip(); // 剪切路径
-        const diameter = imageSpirit.radius * 2;
-        const dx = x - radius;
-        const dy = y - radius;
-        this.context.drawImage(image, dx, dy, diameter, diameter);
-        this.context.restore();
-      }
+      const { image } = imageSpirit;
+      const { x, y } = imageSpirit.getPosition;
+      const radius = imageSpirit.getRadius;
+      this.context.save();
+      this.context.beginPath();
+      this.context.arc(x, y, radius, 0, 2 * Math.PI);
+      // this.context.stroke();
+      this.context.clip(); // 剪切路径
+      const diameter = radius * 2;
+      const dx = x - radius;
+      const dy = y - radius;
+      this.context.drawImage(image, dx, dy, diameter, diameter);
+      this.context.restore();
     }
   }
 }

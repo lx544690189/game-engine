@@ -17,10 +17,17 @@ export async function init() {
   }]);
   const vitejsImg = <CanvasImageSource>imageLoader.getImgByName('vitejs');
   // 创建物理引擎
-  const ballPhysics = new BallPhysics(canvas, 0.1);
+  const ballPhysics = new BallPhysics(canvas, 1000);
   // 创建球球（图片填充的）
   const imageSpirit = new ImageSpirit(vitejsImg, 20);
-  imageSpirit.setInitialAttr(100, 100, 0);
+  imageSpirit.setPosition({
+    x: 100,
+    y: 700,
+  });
+  imageSpirit.setSpeed({
+    x: 1000,
+    y: -900,
+  });
   canvas.addBalls(imageSpirit);
   render(canvas, ballPhysics);
 }

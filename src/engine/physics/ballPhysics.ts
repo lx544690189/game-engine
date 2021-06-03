@@ -1,4 +1,5 @@
 import Canvas from '../canvas';
+import ImageSpirit from '../spirit/imageSpirit';
 
 /**
  * 球体物理引擎
@@ -35,22 +36,71 @@ export default class BallPhysics {
     const length = imageSpirits.length;
     for (let i = 0; i < length; i++) {
       const imageSpirit = imageSpirits[i];
-      // if(imageSpirit.)
-      const beforeT = <number>imageSpirit.speed / this.gravity;
-      const currentT = beforeT + diffTime;
-      const beforeH = (1 / 2) * this.gravity * Math.pow(beforeT, 2);
-      const currentH = (1 / 2) * this.gravity * Math.pow(currentT, 2);
-      const diffH = currentH - beforeH;
-      const currentY = <number>imageSpirit.y + diffH;
-      imageSpirit.speed = this.gravity * currentT;
-      imageSpirit.y = currentY;
-      console.log('currentY: ', currentY);
-      // 边界碰撞，速度衰减
-      if (currentY + imageSpirit.radius >= this.canvas.height) {
-        imageSpirit.speed = imageSpirit.speed * 0.5;
-        imageSpirit.y = this.canvas.height - imageSpirit.radius;
+      this.nextMotionX(imageSpirit, diffTime);
+      this.nextMotionY(imageSpirit, diffTime);
+    }
+    this.moment = Date.now() / 1000;
+  }
+
+  /**
+   * X轴运动
+   * @param imageSpirit
+   * @param during
+   */
+  nextMotionX(imageSpirit: ImageSpirit, during: number) {
+    const position = imageSpirit.getPosition;
+    const speed = imageSpirit.getSpeed;
+    const radius = imageSpirit.getRadius;
+    const { width } = this.canvas;
+    const distance = speed.x * during;
+    const nextPositionX = position.x + distance;
+    if (nextPositionX <= radius || nextPositionX >= width - radius) {
+      speed.x = -speed.x;
+    } else {
+      position.x = nextPositionX;
+    }
+    imageSpirit.setPosition(position);
+    imageSpirit.setSpeed(speed);
+  }
+
+  /**
+   * Y轴运动
+   * @param imageSpirit
+   * @param during
+   */
+  nextMotionY(imageSpirit: ImageSpirit, during: number) {
+    const position = imageSpirit.getPosition;
+    const speed = imageSpirit.getSpeed;
+    const radius = imageSpirit.getRadius;
+    const { height } = this.canvas;
+    if (speed.y > 0) { // 上抛
+      const currentT = speed.y / this.gravity;
+      const currentH = Math.pow(speed.y, 2) / (2 * this.gravity);
+      const beforeT = currentT - during;
+      const beforeSpeed = this.gravity * beforeT;
+      const beforeH = Math.pow(beforeSpeed, 2) / (2 * this.gravity);
+      const distance = currentH - beforeH;
+      const nextPositionY = position.y - distance;
+      if (nextPositionY <= radius) {
+        speed.y = - speed.y;
+      } else {
+        position.y = nextPositionY;
+        speed.y = beforeSpeed;
       }
-      // console.log('imageSpirit.y: ', imageSpirit.y);
+    } else { // 自由落体
+      const beforeT = -speed.y / this.gravity;
+      const currentT = beforeT + during;
+      const beforeH = Math.pow(speed.y, 2) / (2 * this.gravity);
+      const currentSpeed = this.gravity * currentT;
+      const currentH = Math.pow(currentSpeed, 2) / (2 * this.gravity);
+      const distance = currentH - beforeH;
+      const nextPositionY = position.y + distance;
+      if (nextPositionY >= height - radius) {
+        speed.y = - speed.y;
+      } else {
+        position.y = nextPositionY;
+        speed.y = - currentSpeed;
+      }
     }
   }
 }
