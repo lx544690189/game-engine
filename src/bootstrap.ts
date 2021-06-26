@@ -3,6 +3,9 @@ import ImageSpirit from './engine/spirit/imageSpirit';
 import ImageLoader from './engine/loader/imageLoader';
 import BallPhysics from './engine/physics/ballPhysics';
 import ballImg from '@/source/img/ball_1.png';
+import { Random } from 'random-js';
+
+const random = new Random();
 
 export async function init() {
   const ref = <HTMLCanvasElement>document.getElementById('canvas');
@@ -18,17 +21,19 @@ export async function init() {
   const vitejsImg = <CanvasImageSource>imageLoader.getImgByName('vitejs');
   // 创建物理引擎
   const ballPhysics = new BallPhysics(canvas, 1000);
-  // 创建球球（图片填充的）
-  const imageSpirit = new ImageSpirit(vitejsImg, 20);
-  imageSpirit.setPosition({
-    x: 100,
-    y: 700,
-  });
-  imageSpirit.setSpeed({
-    x: 1000,
-    y: -900,
-  });
-  canvas.addBalls(imageSpirit);
+  for(let i=0;i<=10;i++){
+    // 创建球球（图片填充的）
+    const imageSpirit = new ImageSpirit(vitejsImg, 20);
+    imageSpirit.setPosition({
+      x: random.integer(20, window.innerWidth-20),
+      y: random.integer(20, window.innerHeight-20),
+    });
+    imageSpirit.setSpeed({
+      x: random.integer(100, 1000),
+      y: random.integer(-100, -1000),
+    });
+    canvas.addBalls(imageSpirit);
+  }
   render(canvas, ballPhysics);
 }
 let n = 0;
